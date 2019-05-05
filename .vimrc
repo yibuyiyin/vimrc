@@ -16,6 +16,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'vim-syntastic/syntastic'
 Plug 'posva/vim-vue'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 """"""""""""""""""""""
@@ -173,15 +175,22 @@ autocmd BufEnter * silent! lcd %:p:h
 " npm i -g eslint eslint-plugin-vue
 " autocmd FileType vue syntax sync fromstart
 
+" airline
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+
 " syntastic
+set statusline=[%F]%y%r%m%*[%{&encoding}]%=[Line:%l/%L,Column:%c][%p%%]
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_wq = 1
 
 " php checker
 " php静态语法检查
@@ -190,7 +199,7 @@ let g:syntastic_check_on_wq = 0
 " php代码质量检查
 " sudo wget http://static.phpmd.org/php/2.6.0/phpmd.phar -O /usr/local/bin/phpmd
 
-let g:syntastic_python_checkers = ['python3', 'python']
+let g:syntastic_python_checkers = ['python36']
 let g:syntastic_php_checkers = ['php', 'phpmd', 'phpstan']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_css_checkers = ['stylelint']
