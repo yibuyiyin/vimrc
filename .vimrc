@@ -18,6 +18,8 @@ Plug 'vim-syntastic/syntastic'
 Plug 'posva/vim-vue'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" sudo yum install -y the_silver_searcher
+Plug 'rking/ag.vim'
 call plug#end()
 
 """"""""""""""""""""""
@@ -55,6 +57,8 @@ set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " Do not highlight cursor (speeds up highlighting)
 set lazyredraw                  " Wait to redraw
+" set sw=4
+" set ts=4
 
 " Enable to copy to clipboard for operations like yank, delete, change and put
 " http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
@@ -129,12 +133,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Tab操作
-nnoremap <Leader>tc :tabc<CR>
-nnoremap <Leader>tn :tabn<CR>
-nnoremap <Leader>tp :tabp<CR>
-nnoremap <Leader>te :tabe<Space>
-
 " other
 nmap j gj
 nmap k gk
@@ -147,7 +145,7 @@ noremap <silent><Leader>L :set list! list?<CR>
 nnoremap <Leader>C @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 " cscope
-" sudo yum install cscope
+" sudo yum install -y cscope
 nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -167,6 +165,9 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Enter automatically into the files directory
 autocmd BufEnter * silent! lcd %:p:h
 
+autocmd FileType html setlocal sw=2 ts=2
+autocmd FileType css setlocal sw=2 ts=2
+autocmd FileType javascript setlocal sw=2 ts=2
 
 """""""""""""""""""""
 "      Plugins      "
@@ -175,7 +176,7 @@ autocmd BufEnter * silent! lcd %:p:h
 " npm i -g eslint eslint-plugin-vue
 " autocmd FileType vue syntax sync fromstart
 
-" airline
+" airline tab style
 let g:airline#extensions#tabline#enabled = 0
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
