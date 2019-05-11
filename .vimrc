@@ -57,8 +57,13 @@ set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " Do not highlight cursor (speeds up highlighting)
 set lazyredraw                  " Wait to redraw
-" set sw=4
-" set ts=4
+set fdm=manual "indent,syntax,marker,expr,diff
+set backupcopy=yes
+set wildmenu
+set si
+set et
+set sw=4
+set ts=4
 
 " Enable to copy to clipboard for operations like yank, delete, change and put
 " http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
@@ -168,6 +173,8 @@ autocmd BufEnter * silent! lcd %:p:h
 autocmd FileType html setlocal sw=2 ts=2
 autocmd FileType css setlocal sw=2 ts=2
 autocmd FileType javascript setlocal sw=2 ts=2
+autocmd FileType wxss setlocal sw=2 ts=2
+autocmd FileType wxml setlocal sw=2 ts=2
 
 """""""""""""""""""""
 "      Plugins      "
