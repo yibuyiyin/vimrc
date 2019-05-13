@@ -200,7 +200,7 @@ let g:syntastic_check_on_wq = 1
 " php代码质量检查
 " sudo wget http://static.phpmd.org/php/2.6.0/phpmd.phar -O /usr/local/bin/phpmd
 
-let g:syntastic_python_checkers = ['python36']
+let g:syntastic_python_checkers = ['python', 'python36']
 let g:syntastic_php_checkers = ['php', 'phpmd', 'phpstan']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_css_checkers = ['stylelint']
