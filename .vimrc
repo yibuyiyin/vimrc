@@ -18,6 +18,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'posva/vim-vue'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'posva/vim-vue'
 " sudo yum install -y the_silver_searcher
 Plug 'rking/ag.vim'
 call plug#end()
@@ -175,6 +176,9 @@ autocmd FileType css setlocal sw=2 ts=2
 autocmd FileType javascript setlocal sw=2 ts=2
 autocmd FileType wxss setlocal sw=2 ts=2
 autocmd FileType wxml setlocal sw=2 ts=2
+
+" vue
+autocmd FileType vue syntax sync fromstart
 
 """""""""""""""""""""
 "      Plugins      "
