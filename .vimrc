@@ -7,7 +7,7 @@
 " throughout years. Keep it clean and useful - Fatih Arslan
 
 call plug#begin()
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'nsf/gocode', { 'rtp': 'vim' }
 Plug 'fatih/molokai'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -19,6 +19,7 @@ Plug 'posva/vim-vue'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'posva/vim-vue'
+Plug 'scrooloose/nerdcommenter'
 " sudo yum install -y the_silver_searcher
 Plug 'rking/ag.vim'
 call plug#end()
@@ -235,6 +236,15 @@ let g:go_highlight_generate_tags = 1
 nmap <F5> :NERDTreeToggle<cr>
 autocmd VimEnter * NERDTree
 let NERDTreeShowBookmarks=1
+
+" nerdcommenter 注释的时候自动加个空格, 强迫症必配
+let g:NERDSpaceDelims=1
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
 
 " Open :GoDeclsDir with ctrl-g
 nmap <C-g> :GoDeclsDir<cr>
