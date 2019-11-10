@@ -21,6 +21,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'posva/vim-vue'
 Plug 'scrooloose/nerdcommenter'
 " sudo yum install -y the_silver_searcher
+" sudo apt install silversearcher-ag
 Plug 'rking/ag.vim'
 call plug#end()
 
@@ -153,6 +154,7 @@ nnoremap <Leader>C @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 " cscope
 " sudo yum install -y cscope
+" sudo apt install -y cscope
 nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -205,19 +207,20 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 
-" php checker
-" php静态语法检查
-" composer require --dev phpstan/phpstan
-" ln -sf $PWD/vendor/bin/phpstan /usr/local/bin
-" php代码质量检查
-" sudo wget http://static.phpmd.org/php/2.6.0/phpmd.phar -O /usr/local/bin/phpmd
-
-let g:syntastic_python_checkers = ['python', 'python36']
+let g:syntastic_python_checkers = ['python3']
+" curl -sS https://getcomposer.org/installer | php
+" composer config repo.packagist composer https://packagist.phpcomposer.com
+" composer global require phpmd/phpmd
+" composer global require phpstan/phpstan
 let g:syntastic_php_checkers = ['php', 'phpmd', 'phpstan']
+" wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.35.0/install.sh | sh
+" nvm install 10.17.0
+" npm -g install eslint
 let g:syntastic_javascript_checkers = ['eslint']
+" npm -g install stylelint
 let g:syntastic_css_checkers = ['stylelint']
-let g:syntastic_html_checkers=['tidy']
-" let g:syntastic_html_checkers=['tidy', 'stylelint']
+" sudo apt install tidy
+let g:syntastic_html_checkers=['tidy', 'stylelint', 'eslint']
 " let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd', 'phplint', 'phpstan']
 
 " vim-go
