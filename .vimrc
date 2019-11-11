@@ -181,6 +181,7 @@ autocmd FileType wxss setlocal sw=2 ts=2
 autocmd FileType wxml setlocal sw=2 ts=2
 
 " vue
+autocmd FileType vue setlocal sw=2 ts=2
 autocmd FileType vue syntax sync fromstart
 
 """""""""""""""""""""
