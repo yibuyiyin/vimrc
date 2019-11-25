@@ -152,18 +152,6 @@ noremap <silent><Leader>S :set rnu! rnu?<CR>
 noremap <silent><Leader>L :set list! list?<CR>
 nnoremap <Leader>C @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
-" cscope
-" sudo yum install -y cscope
-" sudo apt install -y cscope
-nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
 " 多窗口分割是自动调整大小
 au VimResized * exe "normal! \<c-w>="
 
@@ -348,3 +336,16 @@ let phplib_cscope = '/data1/phplib/.ide/cscope.out'
 if glob(phplib_cscope) != g:ide.'cscope.out' && g:proj_path != ''
     execute 'silent :cscope add '.phplib_cscope
 endif
+
+" cscope
+" sudo yum install -y cscope
+" sudo apt install -y cscope
+nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
