@@ -7,7 +7,7 @@
 " throughout years. Keep it clean and useful - Fatih Arslan
 
 call plug#begin()
-" Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'nsf/gocode', { 'rtp': 'vim' }
 Plug 'fatih/molokai'
 Plug 'AndrewRadev/splitjoin.vim'
