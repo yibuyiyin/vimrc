@@ -7,7 +7,7 @@
 " throughout years. Keep it clean and useful - Fatih Arslan
 
 call plug#begin()
-" Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'nsf/gocode', { 'rtp': 'vim' }
 Plug 'fatih/molokai'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -171,6 +171,9 @@ autocmd FileType wxml setlocal sw=2 ts=2
 " vue
 autocmd FileType vue setlocal sw=2 ts=2
 autocmd FileType vue syntax sync fromstart
+
+" makefile
+autocmd FileType make setlocal sw=8 ts=8 noet
 
 """""""""""""""""""""
 "      Plugins      "
