@@ -307,49 +307,55 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting 代码跟踪工具
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set nocscopeverbose
-let i = 0
-let parent = ''
-let g:proj_path = ''
-while i < 8
-    let g:ide = glob(fnamemodify(parent.".ide", ":p"))
-    if strlen(g:ide)> 0
-        let g:proj_path = fnamemodify(parent, ":p") 
-        break
-    endif
-    let i += 1
-    let parent .= '../'
-endwhile
+"
+if has("cscope")
+    set nocscopeverbose
+    let i = 0
+    let parent = ''
+    let g:proj_path = ''
+    while i < 8
+        let g:ide = glob(fnamemodify(parent.".ide", ":p"))
+        if strlen(g:ide)> 0
+            let g:proj_path = fnamemodify(parent, ":p") 
+            break
+        endif
+        let i += 1
+        let parent .= '../'
+    endwhile
 
-function! BuildTags()
-    if g:proj_path == ''
+    function! BuildTags()
+        if g:proj_path == ''
+            return 0
+        endif
+        execute 'silent !find '.g:proj_path.' \( -path .git -prune -o -name "*.php" -o -name "*.py" -o -name "*.phtml" \) -a -type f > '.g:ide.'cscope.files'
+        " 过滤.gitignore匹配字符不加入cscope，解决非代码文件导致打开慢的问题
+        if filereadable(g:proj_path.'.gitignore')
+            execute 'silent !grep -F -v -f '.g:proj_path.'.gitignore '.g:ide.'cscope.files > '.g:ide.'cscope.files.tmp; mv '.g:ide.'cscope.files.tmp '.g:ide.'cscope.files'
+        endif
+        execute 'silent !cscope -bqk -i '.g:ide.'cscope.files -f '.g:ide.'cscope.out'
+        execute 'silent :cscope kill  '.g:ide.'cscope.out'
+        execute 'silent :cscope add '.g:ide.'cscope.out'
+        execute 'silent !ctags --tag-relative=yes --fields=+iaS --extra=+q -f '.g:ide.'tags -L '.g:ide.'cscope.files'
         return 0
+    endfunction
+    call BuildTags()
+    autocmd BufWritePre *.(php|py) :call BuildTags()
+
+    " 加载php类库代码
+    let phplib_cscope = '/data1/phplib/.ide/cscope.out'
+    if glob(phplib_cscope) != g:ide.'cscope.out' && g:proj_path != ''
+        execute 'silent :cscope add '.phplib_cscope
     endif
-    execute 'silent !find '.g:proj_path.' \( -path .git -prune -o -name "*.php" -o -name "*.py" -o -name "*.phtml" \) -a -type f > '.g:ide.'cscope.files'
-    execute 'silent !cscope -bqk -i '.g:ide.'cscope.files -f '.g:ide.'cscope.out'
-    execute 'silent :cscope kill  '.g:ide.'cscope.out'
-    execute 'silent :cscope add '.g:ide.'cscope.out'
-    "execute 'silent !ctags --tag-relative=yes --fields=+iaS --extra=+q -f '.g:ide.'tags -L '.g:ide.'cscope.files'
-    return 0
-endfunction
-call BuildTags()
-autocmd BufWritePre *.(php|py) :call BuildTags()
 
-" 加载php类库代码
-let phplib_cscope = '/data1/phplib/.ide/cscope.out'
-if glob(phplib_cscope) != g:ide.'cscope.out' && g:proj_path != ''
-    execute 'silent :cscope add '.phplib_cscope
+    " cscope
+    " sudo yum install -y cscope
+    " sudo apt install -y cscope
+    nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
-
-" cscope
-" sudo yum install -y cscope
-" sudo apt install -y cscope
-nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
