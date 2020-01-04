@@ -96,9 +96,15 @@ colorscheme molokai
 " Set leader shortcut to a comma ','. By default it's the backslash
 let mapleader = ","
 
-" mac下复制到系统剪贴板
-map "+y :w !pbcopy<CR><CR>
-map "+p :r !pbpaste<CR><CR> 
+if has('win32')
+elseif has('unix')
+    " linux下复制到系统剪贴板 $ sudo apt-get install xclip
+    map "+y :w !xclip -selection c<CR><CR>
+elseif has('mac')
+    " mac下复制到系统剪贴板
+    map "+y :w !pbcopy<CR><CR>
+    map "+p :r !pbpaste<CR><CR> 
+endif
 
 " 快速查找文件
 let g:ctrlp_map = '<c-p>'
