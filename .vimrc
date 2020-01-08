@@ -98,12 +98,12 @@ let mapleader = ","
 
 if has('win32')
 elseif has('unix')
-    " linux下复制到系统剪贴板 $ sudo apt-get install xclip
-    map "+y :w !xclip -selection c<CR><CR>
+  " linux下复制到系统剪贴板 $ sudo apt-get install xclip
+  map "+y :w !xclip -selection c<CR><CR>
 elseif has('mac')
-    " mac下复制到系统剪贴板
-    map "+y :w !pbcopy<CR><CR>
-    map "+p :r !pbpaste<CR><CR> 
+  " mac下复制到系统剪贴板
+  map "+y :w !pbcopy<CR><CR>
+  map "+p :r !pbpaste<CR><CR> 
 endif
 
 " 快速查找文件
@@ -162,8 +162,6 @@ nnoremap <Leader>C @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 " 多窗口分割是自动调整大小
 au VimResized * exe "normal! \<c-w>="
 
-" 解决粘贴时自动补全加注释符的问题
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "no rm $"|endif|endif
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Enter automatically into the files directory
@@ -174,6 +172,9 @@ autocmd FileType css setlocal sw=2 ts=2
 autocmd FileType javascript setlocal sw=2 ts=2
 autocmd FileType wxss setlocal sw=2 ts=2
 autocmd FileType wxml setlocal sw=2 ts=2
+
+" vim
+autocmd FileType vim setlocal sw=2 ts=2
 
 " vue
 autocmd FileType vue setlocal sw=2 ts=2
@@ -226,6 +227,7 @@ let g:syntastic_html_checkers=['tidy', 'stylelint', 'eslint']
 let g:go_fmt_command = "goimports"
 let g:go_autodetect_gopath = 1
 let g:go_list_type = "quickfix"
+let g:go_version_warning = 0
 
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -262,36 +264,26 @@ command -bang -nargs=* -complete=file WQ wq<bang> <args>
 
 augroup go
   autocmd!
-
   " Show by default 4 spaces for a tab
   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-
   " :GoBuild and :GoTestCompile
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-
   " :GoTest
   autocmd FileType go nmap <leader>t  <Plug>(go-test)
-
   " :GoRun
   autocmd FileType go nmap <leader>r  <Plug>(go-run)
-
   " :GoDoc
   autocmd FileType go nmap <Leader>d <Plug>(go-doc)
-
   " :GoCoverageToggle
   autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
-
   " :GoInfo
   autocmd FileType go nmap <Leader>i <Plug>(go-info)
-
   " :GoMetaLinter
   autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
-
   " :GoDef but opens in a vertical split
   autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
   " :GoDef but opens in a horizontal split
   autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
-
   " :GoAlternate  commands :A, :AV, :AS and :AT
   autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
   autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
@@ -315,53 +307,61 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 if has("cscope")
-    set nocscopeverbose
-    let i = 0
-    let parent = ''
-    let g:proj_path = ''
-    while i < 8
-        let g:ide = glob(fnamemodify(parent.".ide", ":p"))
-        if strlen(g:ide)> 0
-            let g:proj_path = fnamemodify(parent, ":p") 
-            break
-        endif
-        let i += 1
-        let parent .= '../'
-    endwhile
-
-    function! BuildTags()
-        if g:proj_path == ''
-            return 0
-        endif
-        execute 'silent !find '.g:proj_path.' \( -path .git -prune -o -name "*.php" -o -name "*.py" -o -name "*.phtml" \) -a -type f > '.g:ide.'cscope.files'
-        " 过滤.gitignore匹配字符不加入cscope，解决非代码文件导致打开慢的问题
-        if filereadable(g:proj_path.'.gitignore')
-            execute 'silent !grep -F -v -f '.g:proj_path.'.gitignore '.g:ide.'cscope.files > '.g:ide.'cscope.files.tmp; mv '.g:ide.'cscope.files.tmp '.g:ide.'cscope.files'
-        endif
-        execute 'silent !cscope -bqk -i '.g:ide.'cscope.files -f '.g:ide.'cscope.out'
-        execute 'silent :cscope kill  '.g:ide.'cscope.out'
-        execute 'silent :cscope add '.g:ide.'cscope.out'
-        execute 'silent !ctags --tag-relative=yes --fields=+iaS --extra=+q -f '.g:ide.'tags -L '.g:ide.'cscope.files'
-        return 0
-    endfunction
-    call BuildTags()
-    autocmd BufWritePre *.(php|py) :call BuildTags()
-
-    " 加载php类库代码
-    let phplib_cscope = '/data1/phplib/.ide/cscope.out'
-    if glob(phplib_cscope) != g:ide.'cscope.out' && g:proj_path != ''
-        execute 'silent :cscope add '.phplib_cscope
+  set nocscopeverbose
+  let i = 0
+  let parent = ''
+  let g:proj_path = ''
+  while i < 8
+    let g:ide = glob(fnamemodify(parent.".ide", ":p"))
+    if strlen(g:ide)> 0
+      let g:proj_path = fnamemodify(parent, ":p") 
+      break
     endif
+    let i += 1
+    let parent .= '../'
+  endwhile
 
-    " cscope
-    " sudo yum install -y cscope
-    " sudo apt install -y cscope
-    nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-    nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+  function! BuildCscope()
+    if g:proj_path == ''
+      return 0
+    endif
+    execute 'silent !find '.g:proj_path.' \( -path .git -prune -o -name "*.php" -o -name "*.py" -o -name "*.phtml" \) -a -type f > '.g:ide.'cscope.files'
+    " 过滤.gitignore匹配字符不加入cscope，解决非代码文件导致打开慢的问题
+    if filereadable(g:proj_path.'.gitignore')
+      execute 'silent !grep -F -v -f '.g:proj_path.'.gitignore '.g:ide.'cscope.files > '.g:ide.'cscope.files.tmp; mv '.g:ide.'cscope.files.tmp '.g:ide.'cscope.files'
+    endif
+    execute 'silent !cscope -bqk -i '.g:ide.'cscope.files -f '.g:ide.'cscope.out'
+    execute 'silent :cscope kill  '.g:ide.'cscope.out'
+    execute 'silent :cscope add '.g:ide.'cscope.out'
+    execute 'silent !rm -f '.g:ide.'tags'
+    execute 'silent !ctags --tag-relative=yes --fields=+iaS --extra=+q -f '.g:ide.'tags -L '.g:ide.'cscope.files'
+    return 0
+  endfunction
+
+  call BuildCscope()
+  let phplib_cscope = '/data1/phplib/.ide/cscope.out'
+  if glob(phplib_cscope) != g:ide.'cscope.out' && g:proj_path != ''
+    execute 'silent :cscope add '.phplib_cscope
+  endif
+
+  augroup cscope
+    autocmd!
+    autocmd BufWritePre *.php,*.py :call BuildCscope()
+  augroup END
+
+  " cscope
+  " sudo yum install -y cscope
+  " sudo apt install -y cscope
+  nmap <C-g>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-g>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-g>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-g>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-g>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-g>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+  nmap <C-g>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+  nmap <C-g>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 endif
+
+" 解决粘贴时自动补全加注释符的问题
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "no rm $"|endif|endif
+
