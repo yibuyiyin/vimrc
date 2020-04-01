@@ -6,20 +6,79 @@
 " needs. Think of a vimrc as a garden that needs to be maintained and fostered
 " throughout years. Keep it clean and useful - Fatih Arslan
 
+"保存后立即生效
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+
 call plug#begin()
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'nsf/gocode', { 'rtp': 'vim' }
+
+" 配色方案
+" colorscheme neodark
+" Plug 'KeitaNakamura/neodark.vim'
+" colorscheme monokai
+" Plug 'crusoexia/vim-monokai'
+" colorscheme github 
+" Plug 'acarapetis/vim-colors-github'
+" colorscheme one 
+" Plug 'rakr/vim-one'
+" colorscheme molokai
 Plug 'fatih/molokai'
+
+" go 主要插件
+Plug 'fatih/vim-go', { 'tag': '*' }
+Plug 'nsf/gocode', { 'rtp': 'vim' }
+
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" markdown 插件
+Plug 'iamcco/mathjax-support-for-mkdp'
+Plug 'iamcco/markdown-preview.vim'
+
+" 自动生成代码
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" 文件搜索
 Plug 'ctrlpvim/ctrlp.vim'
+
+" 用来提供一个导航目录的侧边栏
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+" 可以使 nerdtree 的 tab 更加友好些
+Plug 'jistr/vim-nerdtree-tabs'
+
+" 可以在导航目录中看到 git 版本信息
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" 查看当前代码文件中的变量和函数列表的插件，
+" 可以切换和跳转到代码中对应的变量和函数的位置
+" 大纲式导航, Go 需要 https://github.com/jstemmer/gotags 支持
+Plug 'majutsushi/tagbar'
+
+" 自动补全括号的插件，包括小括号，中括号，以及花括号
+Plug 'jiangmiao/auto-pairs'
+
+" 代码自动完成，安装完插件还需要额外配置才可以使用
+Plug 'Valloric/YouCompleteMe'
+
+" 可以在文档中显示 git 信息
+Plug 'airblade/vim-gitgutter'
+
 Plug 'vim-syntastic/syntastic'
 Plug 'posva/vim-vue'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'posva/vim-vue'
 Plug 'scrooloose/nerdcommenter'
+
+" 可以快速对齐的插件
+Plug 'junegunn/vim-easy-align'
+
+" 可以在 vim 中使用 tab 补全
+"Plug 'vim-scripts/SuperTab'
+
+" 可以在 vim 中自动完成
+"Plug 'Shougo/neocomplete.vim'
+
 " sudo yum install -y the_silver_searcher
 " sudo apt install silversearcher-ag
 Plug 'rking/ag.vim'
@@ -88,6 +147,10 @@ set t_Co=256
 let g:rehash256 = 1
 let g:molokai_original = 1
 colorscheme molokai
+" colorscheme github
+" colorscheme monokai
+" colorscheme github 
+" colorscheme one 
 
 """"""""""""""""""""""
 "      Mappings      "
@@ -111,6 +174,48 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 " 设置过滤不进行查找的后缀名
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|pyc)$'
+
+"==============================================================================
+"  Valloric/YouCompleteMe 插件
+"==============================================================================
+
+" 配置和 SirVer/ultisnips 冲突的快捷键
+let g:ycm_key_list_select_completion = ['<C-n>', '<space>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+"==============================================================================
+"  其他插件配置
+"==============================================================================
+
+" markdwon 的快捷键
+map <silent> <F6> <Plug>MarkdownPreview
+map <silent> <F7> <Plug>StopMarkdownPreview
+
+" tab 标签页切换快捷键
+:nn <Leader>1 1gt
+:nn <Leader>2 2gt
+:nn <Leader>3 3gt
+:nn <Leader>4 4gt
+:nn <Leader>5 5gt
+:nn <Leader>6 6gt
+:nn <Leader>7 7gt
+:nn <Leader>8 8gt
+:nn <Leader>9 8gt
+:nn <Leader>0 :tablast<CR>
+
+" " ==== 系统剪切板复制粘贴 ====
+" " v 模式下复制内容到系统剪切板
+" vmap <Leader>c "+yy
+" " n 模式下复制一行到系统剪切板
+" nmap <Leader>c "+yy
+" " n 模式下粘贴系统剪切板的内容
+" nmap <Leader>v "+p
 
 " Jump to next error with Ctrl-n and previous error with Ctrl-m. Close the
 " quickfix window with <leader>a
@@ -183,6 +288,9 @@ autocmd FileType vue syntax sync fromstart
 " makefile
 autocmd FileType make setlocal sw=8 ts=8 noet
 
+" 退出插入模式指定类型的文件自动保存
+au InsertLeave *.go,*.sh,*.php,*.py,*.java write
+
 """""""""""""""""""""
 "      Plugins      "
 """""""""""""""""""""
@@ -239,8 +347,6 @@ let g:go_highlight_generate_tags = 1
 " nerdtree
 nmap <F5> :NERDTreeToggle<cr>
 autocmd VimEnter * NERDTree
-let NERDTreeShowBookmarks=1
-
 " nerdcommenter 注释的时候自动加个空格, 强迫症必配
 let g:NERDSpaceDelims=1
 " Allow commenting and inverting empty lines (useful when commenting a region)
@@ -249,6 +355,72 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
+" 显示行号
+let NERDTreeShowLineNumbers=1
+" 打开文件时是否显示目录
+let NERDTreeAutoCenter=1
+" 是否显示隐藏文件
+let NERDTreeShowHidden=0
+" 设置宽度
+" let NERDTreeWinSize=31
+" 忽略一下文件的显示
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+" 打开 vim 文件及显示书签列表
+let NERDTreeShowBookmarks=2
+" 在终端启动vim时，共享NERDTree
+let g:nerdtree_tabs_open_on_console_startup=1
+
+
+" majutsushi/tagbar 插件打开关闭快捷键
+nmap <F4> :TagbarToggle<CR>
+
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+
+"==============================================================================
+"  nerdtree-git-plugin 插件
+"==============================================================================
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+
+let g:NERDTreeShowIgnoredStatus = 1
+
 
 " Open :GoDeclsDir with ctrl-g
 nmap <C-g> :GoDeclsDir<cr>
