@@ -13,8 +13,10 @@ function Updates()
   let start = 0
   let end = 0
   while 1
+    exe "normal!j"
     let i += 1
     if i == 1
+      exe "normal!f,f d$a ".word.");"
       continue
     endif
     let autoI = i + baseI
@@ -26,7 +28,9 @@ function Updates()
       break
     endif
   endwhile
+  exe "normal!dd"
   exe start.",".end."s/add(/".word.".add(/g"
+  exe "silent :".start.",".end." m ".baseI
 endfunction
 
 nmap <F3> :call Updates()<CR>
