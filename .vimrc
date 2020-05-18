@@ -6,8 +6,30 @@
 " needs. Think of a vimrc as a garden that needs to be maintained and fostered
 " throughout years. Keep it clean and useful - Fatih Arslan
 
-"保存后立即生效
-"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+function Updates()
+  let baseI = line('.')
+  let word = expand("<cword>")
+  let i = 0
+  let start = 0
+  let end = 0
+  while 1
+    let i += 1
+    if i == 1
+      continue
+    endif
+    let autoI = i + baseI
+    let line_str = getline(autoI)
+    if line_str =~ "add("
+      let start = start>0 ? start : autoI
+      let end = autoI
+    else
+      break
+    endif
+  endwhile
+  exe start.",".end."s/add(/".word.".add(/g"
+endfunction
+
+nmap <F3> :call Updates()<CR>
 
 call plug#begin()
 
@@ -197,6 +219,9 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 map <silent> <F6> <Plug>MarkdownPreview
 map <silent> <F7> <Plug>StopMarkdownPreview
 
+" 加载.vimrc
+:nn <Leader>vr :source $MYVIMRC<CR>
+
 " tab 标签页切换快捷键
 :nn <Leader>1 1gt
 :nn <Leader>2 2gt
@@ -222,6 +247,9 @@ map <silent> <F7> <Plug>StopMarkdownPreview
 map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
+
+" 刷新
+nnoremap <leader>f :syntax sync fromstart<CR>
 
 " Visual linewise up and down by default (and use gj gk to go quicker)
 noremap <Up> gk
@@ -273,13 +301,19 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd BufEnter * silent! lcd %:p:h
 
 autocmd FileType html setlocal sw=2 ts=2
+autocmd FileType html syntax sync fromstart
 autocmd FileType css setlocal sw=2 ts=2
+autocmd FileType css syntax sync fromstart
 autocmd FileType javascript setlocal sw=2 ts=2
+autocmd FileType javascript syntax sync fromstart
 autocmd FileType wxss setlocal sw=2 ts=2
+autocmd FileType wxss syntax sync fromstart
 autocmd FileType wxml setlocal sw=2 ts=2
+autocmd FileType wxml syntax sync fromstart
 
 " vim
 autocmd FileType vim setlocal sw=2 ts=2
+autocmd FileType vim syntax sync fromstart
 
 " vue
 autocmd FileType vue setlocal sw=2 ts=2
@@ -287,6 +321,7 @@ autocmd FileType vue syntax sync fromstart
 
 " makefile
 autocmd FileType make setlocal sw=8 ts=8 noet
+autocmd FileType make syntax sync fromstart
 
 " 退出插入模式指定类型的文件自动保存
 au InsertLeave *.go,*.sh,*.php,*.py,*.java write
