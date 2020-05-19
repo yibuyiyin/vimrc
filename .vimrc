@@ -28,9 +28,11 @@ function Updates()
       break
     endif
   endwhile
-  exe "normal!dd"
-  exe start.",".end."s/add(/".word.".add(/g"
-  exe "silent :".start.",".end." m ".baseI
+  if start > 0
+    exe "normal!dd"
+    exe start.",".end."s/add(/".word.".add(/g"
+    exe "silent :".start.",".end." m ".baseI
+  endif
 endfunction
 
 nmap <F3> :call Updates()<CR>
