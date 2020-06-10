@@ -337,7 +337,7 @@ au InsertLeave *.go,*.sh,*.php,*.py,*.java write
 """""""""""""""""""""
 " vue
 " npm i -g eslint eslint-plugin-vue
-" autocmd FileType vue syntax sync fromstart
+autocmd FileType vue syntax sync fromstart
 
 " airline tab style
 let g:airline#extensions#tabline#enabled = 0
