@@ -52,21 +52,21 @@ call plug#begin()
 Plug 'fatih/molokai'
 
 " go 主要插件
-Plug 'fatih/vim-go', { 'tag': '*' }
-Plug 'nsf/gocode', { 'rtp': 'vim' }
+"Plug 'fatih/vim-go', { 'tag': '*' }
+"Plug 'nsf/gocode', { 'rtp': 'vim' }
 
 Plug 'AndrewRadev/splitjoin.vim'
 
 " markdown 插件
-Plug 'iamcco/mathjax-support-for-mkdp'
-Plug 'iamcco/markdown-preview.vim'
+"Plug 'iamcco/mathjax-support-for-mkdp'
+"Plug 'iamcco/markdown-preview.vim'
 
 " 自动生成代码
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
 
 " 文件搜索
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 
 " 用来提供一个导航目录的侧边栏
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -86,16 +86,16 @@ Plug 'majutsushi/tagbar'
 Plug 'jiangmiao/auto-pairs'
 
 " 代码自动完成，安装完插件还需要额外配置才可以使用
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 " 可以在文档中显示 git 信息
 Plug 'airblade/vim-gitgutter'
 
-Plug 'vim-syntastic/syntastic'
-Plug 'posva/vim-vue'
+"Plug 'vim-syntastic/syntastic'
+"Plug 'posva/vim-vue'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'posva/vim-vue'
+"Plug 'posva/vim-vue'
 Plug 'scrooloose/nerdcommenter'
 
 " 可以快速对齐的插件
